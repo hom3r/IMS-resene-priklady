@@ -1,0 +1,348 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage[czech]{babel}
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=1.5in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{amsmath}
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+
+\lstset{
+  language=C,                % choose the language of the code
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers.        
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+}
+
+
+%%% The "real" document content comes below...
+
+\title{IMS\\Příklady na semestrálku}
+\author{Přebráno z Fitušky (fórum a wiki)}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Programování na papír}
+
+
+
+\subsection{Monte Carlo (nick)}
+
+Napište v jazyku C funkci \texttt{double MCIntegral()} pro výpočet N-násobného určitého integrálu funkce \texttt{double f(double x[], unsigned N)} (podle všech X i , i náleží {0,...,N-1}) metodou Monte Carlo (integrál musí být N-násobný, jinak 0 bodů) s přesností přibližně 1\%. Meze integrálu jsou uloženy v globálním poli struktur \texttt{Range} s položkami \texttt{.min} a~\texttt{.max}. Předpokládejte, že neznáte rozsah funkčních hodnot funkce \texttt{f}. Máte k dispozici pouze funkci \texttt{double Random(void)} vracející pseudonáhodná čísla v rozsahu  $\langle 0,1)$, \texttt{f} a~žádnou jinou
+
+\lstinputlisting{Monte.c}
+
+
+
+\subsection{Kongruentní generátor pseudonáhodných čísel (nick)}
+V ISO C napište funkci double \texttt{Random(void)} ve které bude váš vlastní kód kongruentního generátoru s rozsahem $\langle 0,1)$, konstanty \texttt{A}, \texttt{B}, \texttt{M} máte k dispozici. Máte zadánu funkci hustoty pravděpodobnosti $f(x)$ (nakreslete ilustrační obrázek).
+
+\begin{align}
+&f(x) = \frac{x}{2} \text{ pro x na intervalu $\langle0,2$)} \\
+&f(x) = 0 \text{ jinak}
+\end{align}
+
+\begin{enumerate}[\itshape a\upshape)]
+\item Napište funkci double \texttt{RandGenInv(void)}, která generuje číslo se zadaným rozložením s využitím metody inverzní transformace (jinak -5 bodů).
+\item Napište funkci double \texttt{RandGenReject(void)}, která generuje číslo se zadaným rozložením s využitím metody vylučovací (jinak -5 bodů).
+\item Vypočtěte pravděpodobnost, že náhodná proměnná $X$ s hustotou pravděpodobnosti $f(x)$ zadanou výše bude mít hodnotu $0.5$.
+\item Vyjádřete distribuční funkci obecného spojitého rozložení $F(x)$ pomocí její funkce hustoty pravděpodobnosti $f(x)$.
+\end{enumerate}
+
+\lstinputlisting{Random.c}
+
+\subsection*{Řešení}
+
+\begin{enumerate}[\itshape a\upshape)]
+\item
+Rovnice
+\begin{align}
+&F(x) = \int \frac{x}{2} dx = \frac{x^2}{4} \\
+&F^{-1}(x) = \sqrt{4x} = 2 \sqrt{x}
+\end{align}
+
+Program
+\lstinputlisting{RandGenInv.c}
+
+\item
+
+Program
+\lstinputlisting{RandGenReject.c}
+
+\item
+$$\int_{0.5}^{0.5} f(x) dx = 0$$
+Poznámka: Pravděpodobnost jednoho konkrétního čísla z nekonečna (na spojitém intervalu je nekonečné množství reálných čísel) je vždy nulová. Aby byla nenulová, musí to být hodnota z intervalu (pak se nebudou meze integrálu rovnat).
+
+\item
+$$F(x) = \int_{-\infty}^{x}f(t)dt$$
+Poznámka: $t$ je pomocná proměnná zavedená pro odlišení $x$, které je parametrem funkce $f(x)$ a podle kterého se derivuje, od $x$, které je vstupním parametrem funkce $F(x)$. Nesouvisí s žádnou proměnnou mimo tento výraz.
+\end{enumerate}
+
+
+\subsection{Algoritmy řízení simulace}
+\subsubsection{Řízení diskrétní simulace -- Next-event (skeWer)}
+\lstinputlisting{RizeniDiskretni.c}
+
+\subsubsection{Řízení spojité simulace (Royce)}
+\lstinputlisting{RizeniSpojita.c}
+
+\subsubsection{Řízení kombinované simulace (skeWer)}
+\lstinputlisting{RizeniKombinovana.c}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section{Markovské procesy}
+
+\subsection{D/D/x, kalendáře}
+
+\subsubsection{D/D/x bez poruchy (wiki)}
+D/D/2 popsat stav simulace, kalendář, pořadí událostí a frontu v čase $6.5s$, začíná se v~$0s$, generuje se každou $1s$ a~zpracování trvá $3s$.
+\vskip 0.25cm
+
+\noindent
+Časový diagram:
+\vskip 0.1cm
+
+\begin{tabular}{|c||ccccccc|cc|}
+\hline
+t & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+\hline
+\hline
+Z0 & P0 & P0 & P0 & P2 & P2 & P2 & P4 & P4  & P4\\
+Z1 & & P1 & P1 & P1 & P3 & P3 & P3 & &\\
+\hline
+Q & & & P2 & P3 & P4 & P4 & P5 & & \\
+ & & & & & & P5 & P6 & & \\
+\hline
+\end{tabular}
+
+\vskip 0.3cm
+\noindent
+Seznam událostí:
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item
+ vygenerování P0, P0 obsazuje Z0
+\item
+ vygenerování P1, P1 obsazuje Z1
+\item
+ vygenerování P2, P2 jde do fronty
+\item
+ konec obsluhy P0, P2 obsazuje Z0, vygenerování P3, P3 jde do fronty
+\item
+ konec obsluhy P1, P3 obsazuje Z1, vygenerování P4, P4 jde do fronty
+\item
+ vygenerování P5, P5 jde do fronty
+\item
+ konec obsluhy P2, P4 obsazuje Z0, vygenerování P6, P6 jde do fronty
+\\\line(1,0){300}
+\\(dále jsou již jenom naplánované události)
+\item
+ konec obsluhy P3,  vygenerování P7
+\item
+\item
+ konec obsluhy P4
+\end{enumerate}
+
+\vskip 0.3cm
+\noindent
+Fronta:
+\begin{tabular}{|rl|}
+\hline
+$\rightarrow$ & P5 \\
+\hline
+& P6\\
+\hline
+\end{tabular}
+
+\vskip 0.3cm
+\noindent
+Obsah kalendáře
+\begin{tabular}{|c|c|l|}
+\hline
+čas & priorita & událost \\
+\hline
+7 & 0 & P3$\rightarrow$Release\\
+7 & 0 & Generator$\rightarrow$Activate\\
+9 & 0 & P4$\rightarrow$Release\\
+\hline
+\end{tabular}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{D/D/x s poruchou (mesma)}
+D/D/3, fronta LIFO, příchody každou 1s, obsluha trvá 3s. V čase 2s přijde porucha do Z0 a trvá 2s. Vyjádřit v čase $4.5s$.
+\vskip 0.25cm
+
+\noindent
+Časový diagram:
+\vskip 0.1cm
+
+\begin{tabular}{|c||ccccc|cc|}
+\hline
+t & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+\hline
+\hline
+Z0 & P0 & P0 & x & x & P0 & & \\
+Z1 & & P1 & P1 & P1 & P3 & P3 & P3\\
+Z2 & & & P2 & P2 & P2 & & \\
+\hline
+Q & & & & P3 & P4 & & \\
+\hline
+\end{tabular}
+
+\vskip 0.3cm
+\noindent
+Seznam událostí:
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item
+ vygenerování P0, P0 obsazuje Z0
+\item
+ vygenerování P1, P1 obsazuje Z1
+\item
+ porucha obsazuje Z0, vygenerování P2, P2 obsazuje Z2
+\item
+ vygenerování P3, P3 jde do fronty
+\item
+ konec poruchy Z0, konec obsluhy P1, P3 obsazuje Z1, vygenerování P4, P4 jde do fronty
+\\\line(1,0){300}
+\\(dále jsou již jenom naplánované události)
+
+\item
+ konec obsluhy P2, konec obsluhy P0, vygenerování P5
+\item
+
+\item
+ konec obsluhy P3
+\end{enumerate}
+
+\vskip 0.3cm
+\noindent
+Fronta:
+\begin{tabular}{|rl|}
+\hline
+$\rightarrow$ & P4 \\
+\hline
+\end{tabular}
+
+\vskip 0.3cm
+\noindent
+Obsah kalendáře
+\begin{tabular}{|c|c|l|}
+\hline
+čas & priorita & událost \\
+\hline
+5 & 0 & P2$\rightarrow$Release\\
+5 & 0 & P0$\rightarrow$Release\\
+5 & 0 & Generator$\rightarrow$Activate\\
+7 & 0 & P3$\rightarrow$Release\\
+\hline
+\end{tabular}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section{Teorie (\textit{wiki})}
+\begin{description}
+\item[Abstraktní model] zjednodušený pospis zkoumaného systému
+\item[Buňka (cell)] základní element, může být v jednom z konečného počtu stavů (0/1)
+\item[Celulární automat] je souhrné označení pro určitý typ fyzikálního modelu reálné situace, slouží k časové i prostorové diskrétní ideální modelaci fyzikálních systémů, kde hodnoty veličin nabývají pouze diskrétních hodnot
+\item[Chování systému] každému časovému průběhu vstupní veličiny přiřazuje časový průběh výstupních veličin, je dáno vzájemnými interakcemi mezy prvky systému a mezi systémem a jeho okolím
+\item[Diskrétní simulace] simulace s dikrétními prvky a časem. Experimentování se simulačním modelem.
+\item[Markovova vlastnost] následující stav procesu závisí jen na aktuálním stavu (ne na minulosti)
+\item[Markovský proces] náhodný diskrétní proces se spojitým časem, který splňuje markovovu vlastnost
+\item[Markovův řetězec] náhodný diskrétní proces s diskrétním časem, který splňuje markovovu vlastnost, ekvivalentem je konečný automat s pravděpodobnostmi přechodů
+\item[Model] napodobenina systému jiným systémem
+\item[Modelování] proces vytváření abstraktního modelu
+\item[Modelový čas] časová osa modelu, může být reálný, zrychlený, zpomalený
+\item[Monte Carlo] metoda používaná k výpočtu určitých integrálů, určená pro simulaci systémů, které jsou založeny na experimentování se stochastickými modely s využitím generátorů náhodných čísel
+\item[Okolí (neighbourhood)] několik typů, liší se počtem okolních buněk, se kterými se pracuje
+\item[Pole buněk (lattice)] n--rozměrné, obvykle 1D nebo 2D, rovnoměrné dělení prostoru, může být konečné nebo nekonečné
+\item[Pravidla (rules)] funkce stavu buňky a jejího okolí definují nový stav buňky v čase s(t + 1) = f(s(t), Ns(t))
+\item[Petriho síť] graf popisující stavy a přechody mezi stavy, umožňuje znázornění paralelismu a nedeterminismu
+\item[Priorita obsluhy] proces s vyšší prioritou obsluhy než současný může vyhodit současný proces a sám obsadit zařízení
+\item[Priorita procesu] pro řazení ve vnější frontě u zařízení a v kalendáři (primárne podľa času a sekundárne podľa priority)
+\item[Proces] posloupnost událostí
+\item[Reálný čas] probíhá v něm skutečný děj v reálném systému
+\item[Řád metody numerické integrace] stupeň polynomu N (Taylorův rozvoj) definuje tzv. řád metody, tímto polynomem aproximujeme na základě aktuální hodnoty
+\item[Rychlá smyčka] tvoří cyklus v orientovaném grafu závislostí funkčních bloků.
+\item[SHO] systémy obsluhující zařízení, která poskytují obsluhu transakcím, součástí SHO jsou transakce, fronty, obslužné linky
+\item[Simulace] experimentování s modelem, získávání nových znalostí
+\item[Simulační model] abstraktní model zapsaný kódem
+\item[Spojitý systém] všechny prvky systému mají spojité chování (nemění své parametry skokově)
+\item[Statistiky] vytížení zařízení, délky front, doby čekání ve frontách, využití kapacity skladů, celková doba transakce strávené v systému, maximum, minimum, střední hodnoty, směrodatná odchylka, rozptyl, ...
+\item[Stavová podmínka] diskrétní podmínka ve spojité simulaci, která může nějakým způsobem ovlivnit model (jiné rovnice pro výpočet kapaliny a páry), je citlivá na hranu, takže se vykonává pouze při změně, na základě její změny vyvolám stavovou událost
+\item[Stavová událost] akce, která je podmíněna změnou pravdivostní hodnoty stavové podmínky (např.: otočení hodnoty integrátoru), diskrétní skoková změna systému
+\item[Strojový čas] čas CPU spotřebovaný na výpočet programu (závisí na složitosti simulačního modelu, nesouvisí přímo s modelovým časem)
+\item[Systém] soubor elementárních částí, které mají mezi sebou vazby
+\item[Třídy statistik] stat, tstat (bere v potaz čas), histogram, mají společné operace s.Clear() (inicializace), s.Output() (tisk), s(x) (záznam hodnoty x)
+\item[Událost] změna stavu diskrétního systému, jednorázová, nepřerušitelná
+\item[Validace modelu] ověřování platnosti modelu a proces, kdy se snažíme dokázat, že pracujeme s modelem adekvátním modelovanému systému
+\item[Verifikace modelu] dokazování izomorfnosti (rovnosti) abstraktního modelu s modelem simulačním, jinak řečeno ověřování korespondence abstraktního modelu se simulačním modelem
+
+\end{description}
+
+\end{document}
