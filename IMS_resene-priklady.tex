@@ -14,7 +14,7 @@
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper} % or letterpaper (US) or a5paper or....
 % \geometry{margin=1.5in} % for example, change the margins to 2 inches all round
-% \geometry{landscape} % set up the page for landscape
+\geometry{portrait}
 %   read geometry.pdf for detailed page layout information
 
 \usepackage{graphicx} % support the \includegraphics command and options
@@ -29,6 +29,7 @@
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 % These packages are all incorporated in the memoir class to one degree or another...
 \usepackage{listings}
+\usepackage{courier}
 \usepackage{paralist}
 \usepackage{amsmath}
 
@@ -54,7 +55,8 @@
 
 
 \lstset{
-  language=C,                % choose the language of the code
+  basicstyle=\footnotesize\ttfamily,
+ % language=C,                % choose the language of the code
   numbers=left,                   % where to put the line-numbers
   stepnumber=1,                   % the step between two line-numbers.        
   numbersep=5pt,                  % how far the line-numbers are from the code
@@ -91,7 +93,7 @@ Napište v jazyku C funkci \texttt{double MCIntegral()} pro výpočet N-násobn�
 \lstinputlisting{Monte.c}
 
 
-
+\newpage
 \subsection{Kongruentní generátor pseudonáhodných čísel (nick)}
 V ISO C napište funkci double \texttt{Random(void)} ve které bude váš vlastní kód kongruentního generátoru s rozsahem $\langle 0,1)$, konstanty \texttt{A}, \texttt{B}, \texttt{M} máte k dispozici. Máte zadánu funkci hustoty pravděpodobnosti $f(x)$ (nakreslete ilustrační obrázek).
 
@@ -147,6 +149,41 @@ Poznámka: $t$ je pomocná proměnná zavedená pro odlišení $x$, které je pa
 \subsubsection{Řízení kombinované simulace (skeWer)}
 \lstinputlisting{RizeniKombinovana.c}
 
+\newpage
+\subsection{Runge-Kutta}
+\subsubsection{RK2 (nick)}
+V jazyce ISO C napište funkci \texttt{Step\_RK2 (double t, double st[], double in[], unsigned N, double stepSize)}, které předáte modelový čas \texttt{t}, stav všech integrátorů v poli \texttt{st}, jejich počet \texttt{N} a délku kroku \texttt{stepSize}.
+
+\noindent
+Vzorec definující metodu:
+\begin{align}
+&k_1 = hf(t, y(t))\\
+&k_2 = hf(t + \frac{h}{2}, y(t) + \frac{k_1}{2})\\
+&y(t+h) = y(t) + k_2
+\end{align}
+
+\noindent
+Chování modelu je popsáno funkcí \texttt{Dynamic (double t, double st[], double in[], unsigned N)} ve které se vypočítávají vstupy integrátorů \texttt{in[i]} pro daný stav \texttt{st[i]} a čas \texttt{t}. Počáteční podmínky se nastavují funkcí \texttt{void InitModel(double st[], unsigned N)}, tyto dvě funkce nepište.
+
+\lstinputlisting{RK2_1.c}
+\noindent
+Definujte všechny potřebné proměnné a napište funkci \texttt{void Run(double t1, double t2)} implementující algoritmus řízení spojité simulace s využitím \texttt{Step\_RK2}. Nezapomeňte \uv{dokročit} na čas konce simulace $t2$. Řešení (max 30 řádků) velmi stručně komentujte.
+\lstinputlisting{RK2_2.c}
+
+\newpage
+\subsubsection{RK4 (nick)}
+Stejné zadání jako RK2, ale s rovnicemi pro RK4.
+\begin{align}
+&k_1 = hf(t, y(t))\\
+&k_2 = hf(t + \frac{h}{2}, y(t) + \frac{k_1}{2})\\
+&k_3 = hf(t + \frac{h}{2}, y(t) + \frac{k_2}{2})\\
+&k_4 = hf(t + h, y(t) + k_3)\\
+&y(t+h) = y(t) + \frac{k_1}{6} + \frac{k_2}{3} + \frac{k_3}{3} + \frac{k_4}{6}
+\end{align}
+
+\noindent
+Řešení
+\lstinputlisting{RK4.c}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

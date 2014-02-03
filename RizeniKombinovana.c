@@ -1,5 +1,9 @@
 inicializace poc. stavu a promennych a casu;
 while (cas < koncovy_cas) {
+  if (kalendar_empty) {
+    cas = koncovy_cas;
+    konec_simulace();
+  }
   vyber_zaznam_z_kalendare();
   while ( (cas + krok < koncovy_cas) && (cas + krok < aktivacni_cas_pristi_udalosti) ) { //"neprekroceni" udalosti / konce
     krok_numericke_metody();
@@ -13,8 +17,7 @@ while (cas < koncovy_cas) {
     krok_numericke_metody();
     cas += krok; //nebo: cas = koncovy_cas
     konec_simulace();
-  }
-  else {
+  } else {
     krok = aktivacni_cas_pristi_udalosti - cas;
     krok_numericke_metody();
     cas += krok; //nebo: cas = aktivacni_cas_pristi_udalosti
