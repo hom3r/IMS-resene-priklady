@@ -8,13 +8,13 @@ void Step_RK4(double t,double st[],double in[],unsigned N,double h){
     Dynamic(t, st, in, N);
     for(unsigned i=0; i<N; i++){
         k1[i] = h * in[i];
-        st[i] = startSt[i] * k1[i]/2;
+        st[i] = startSt[i] + k1[i]/2;
     }
     
     Dynamic(t+h/2, st, in, N);
     for(unsigned i=0; i<N; i++){
         k2[i] = h * in[i];
-        st[i] = startSt[i] * k2[i]/2;
+        st[i] = startSt[i] + k2[i]/2;
     }
     
     Dynamic(t+h/2, st, in, N);
